@@ -34,11 +34,11 @@ class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateC
             TextAlignment = TextAlignment.Center
         };
         var count = await col.GetCountAsync();
-        var list = new List<ProjectRoot>(count);
+        var projList = new List<ProjectRoot>(count);
         for (int i = 0; i < count; i++)
         {
             var ele = await col.GetAsync(i);
-            list.Add(ele);
+            projList.Add(ele);
             nav.MenuItems.Add(new NavigationViewItem { Content = CreateTB(ele.TitleProperty) });
         }
         var newBtn = new NavigationViewItem() { SelectsOnInvoked = false, Icon = new SymbolIcon(Symbol.Add), Content = "New Project" };
@@ -54,8 +54,7 @@ class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateC
                 };
             else
                 mainView.Child = new ProjectTaskListDisplay(
-                    list[nav.MenuItems.IndexOf(nav.SelectedItem)].RootTask.Children,
-                    padding: true
+                    projList[nav.MenuItems.IndexOf(nav.SelectedItem)].Children
                 )
                 {
                     Margin = new(0, 16, 0, 16)
@@ -69,10 +68,12 @@ class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateC
         {
             if (e.InvokedItemContainer == newBtn)
             {
-                var ele = await col.CreateNewAsync(null);
-                await ele.TitleProperty.SetAsync("New Project");
-                list.Add(ele);
-                var nvi = new NavigationViewItem { Content = CreateTB(ele.TitleProperty) };
+                var projRoot = await col.CreateNewAsync(null);
+                await projRoot.TitleProperty.SetAsync("New Project");
+                // create an empty task
+                await projRoot.Children.CreateNewAsync(null);
+                projList.Add(projRoot);
+                var nvi = new NavigationViewItem { Content = CreateTB(projRoot.TitleProperty) };
                 nav.MenuItems.Add(nvi);
                 // select it
                 nav.SelectedItem = nvi;
