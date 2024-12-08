@@ -10,9 +10,12 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using static Get.UI.Data.QuickCreate;
 using NavigationViewBackButtonVisible = Microsoft.UI.Xaml.Controls.NavigationViewBackButtonVisible;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System;
 namespace Get.ProjectPlanner.UIControls;
 
-class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateControl<NavigationView>
+partial class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateControl<NavigationView>
 {
     protected override async void Initialize(NavigationView nav)
     {
@@ -33,7 +36,10 @@ class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateC
             VerticalAlignment = VerticalAlignment.Center,
             TextAlignment = TextAlignment.Center
         };
+        // apparently we have to add the button first?
+        // otherwise InvalidCastException
         var count = await col.GetCountAsync();
+        //count = 0;
         var projList = new List<ProjectRoot>(count);
         for (int i = 0; i < count; i++)
         {
@@ -79,5 +85,13 @@ class ProjectRootListDisplay(FolderAsyncCollection<ProjectRoot> col) : TemplateC
                 nav.SelectedItem = nvi;
             }
         };
+    }
+}
+static class Extension
+{
+    public static T ForceWait<T>(this Task<T> task)
+    {
+        task.Wait();
+        return task.Result;
     }
 }

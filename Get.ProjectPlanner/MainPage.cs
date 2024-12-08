@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Input;
 
 namespace Get.ProjectPlanner;
 
-class MainPage : Page
+partial class MainPage : Page
 {
     public FolderAsyncCollection<ProjectRoot> ProjectsProperty { get; }
     public MainPage()

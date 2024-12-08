@@ -10,7 +10,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Input;
 namespace Get.ProjectPlanner.UIControls;
 
-class AsyncTextBox(IAsyncProperty<string> prop, string placeholder = "", bool asTextBlock = true, bool autoFocus = false) : TemplateControl<TextBox>
+partial class AsyncTextBox(IAsyncProperty<string> prop, string placeholder = "", bool asTextBlock = true, bool autoFocus = false) : TemplateControl<TextBox>
 {
     protected override async void Initialize(TextBox rootElement)
     {

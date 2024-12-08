@@ -5,7 +5,7 @@ using System;
 using Get.Data.Helpers;
 namespace Get.ProjectPlanner.UIControls;
 
-class ProjectTaskDisplay(ProjectTaskListDisplay parent, ProjectTask pt, bool autoFocus = false) : TemplateControl<StackPanel>
+partial class ProjectTaskDisplay(ProjectTaskListDisplay parent, ProjectTask pt, bool autoFocus = false) : TemplateControl<StackPanel>
 {
     protected override void Initialize(StackPanel rootElement)
     {

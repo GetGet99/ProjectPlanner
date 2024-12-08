@@ -6,7 +6,7 @@ using ProgressRing = Microsoft.UI.Xaml.Controls.ProgressRing;
 using System.Threading.Tasks;
 namespace Get.ProjectPlanner.UIControls;
 
-class ProjectTaskListDisplay(FolderAsyncCollection<ProjectTask> col) : TemplateControl<StackPanel>
+partial class ProjectTaskListDisplay(FolderAsyncCollection<ProjectTask> col) : TemplateControl<StackPanel>
 {
     const int INDENT = 24;
     StackPanel? childSP;

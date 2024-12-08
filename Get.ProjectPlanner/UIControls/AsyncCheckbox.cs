@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Get.ProjectPlanner.UIControls;
 
-class AsyncCheckBox(IAsyncProperty<bool> prop) : TemplateControl<CheckBox>
+partial class AsyncCheckBox(IAsyncProperty<bool> prop) : TemplateControl<CheckBox>
 {
     protected override async void Initialize(CheckBox rootElement)
     {
