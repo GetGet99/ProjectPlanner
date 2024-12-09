@@ -20,16 +20,19 @@ partial class MainPage : Page
         var localFolder = ApplicationData.Current.LocalFolder;
         ProjectsProperty = new(localFolder.GetFolder("projects"), x => new(new(() => x)));
         Content = InitContent();
-        //KeyDown += OnKeyDown;
+#if DEBUG
+        KeyDown += OnKeyDown;
+#endif
     }
-    //// Hot Reload
-    //private void OnKeyDown(object sender, KeyRoutedEventArgs e)
-    //{
-    //    if (e.Key is VirtualKey.R && Window.Current.CoreWindow.GetKeyState(VirtualKey.Control) is not CoreVirtualKeyStates.None)
-    //        Content = InitContent();
-    //}
-
-    UIElement InitContent()
+#if DEBUG
+    // Hot Reload
+    private void OnKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        if (e.Key is VirtualKey.R && Window.Current.CoreWindow.GetAsyncKeyState(VirtualKey.Control) is not CoreVirtualKeyStates.None)
+            Content = InitContent();
+    }
+#endif
+    ProjectRootListDisplay InitContent()
     {
         return new ProjectRootListDisplay(ProjectsProperty);
     }

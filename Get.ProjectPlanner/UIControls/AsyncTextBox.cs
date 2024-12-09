@@ -12,8 +12,10 @@ namespace Get.ProjectPlanner.UIControls;
 
 partial class AsyncTextBox(IAsyncProperty<string> prop, string placeholder = "", bool asTextBlock = true, bool autoFocus = false) : TemplateControl<TextBox>
 {
+    TextBox? tb;
     protected override async void Initialize(TextBox rootElement)
     {
+        tb = rootElement;
         if (asTextBlock)
         {
             rootElement.Margin = new(-4, 0, 0, 0);
@@ -35,7 +37,13 @@ partial class AsyncTextBox(IAsyncProperty<string> prop, string placeholder = "",
         rootElement.IsEnabled = true;
         rootElement.AddHandler(PreviewKeyDownEvent, new KeyEventHandler((_, e) =>
         {
-            if (e.Key is VirtualKey.Enter)
+            if (e.Key is VirtualKey.Tab)
+            {
+                e.Handled = true;
+                var isShiftDown = Window.Current.CoreWindow.GetAsyncKeyState(VirtualKey.Shift) is not CoreVirtualKeyStates.None;
+                Navigate?.Invoke(!isShiftDown);
+            }
+            else if (e.Key is VirtualKey.Enter)
             {
                 if (Window.Current.CoreWindow.GetAsyncKeyState(VirtualKey.Control) is not CoreVirtualKeyStates.None)
                 {
@@ -52,14 +60,26 @@ partial class AsyncTextBox(IAsyncProperty<string> prop, string placeholder = "",
                     CtrlDel?.Invoke();
                 }
             }
+            else if (e.Key is VirtualKey.Space)
+            {
+                if (Window.Current.CoreWindow.GetAsyncKeyState(VirtualKey.Control) is not CoreVirtualKeyStates.None)
+                {
+                    e.Handled = true;
+                    CtrlSpace?.Invoke();
+                }
+            }
         }), true);
         if (autoFocus)
         {
             rootElement.Focus(FocusState.Keyboard);
         }
     }
-
-
+    public void FocusNavigate()
+    {
+        tb?.Focus(FocusState.Keyboard);
+    }
+    public event Action<bool>? Navigate;
+    public event Action? CtrlSpace;
     public event Action? CtrlDel;
     public event Action? CtrlEnter;
     public event Action? CtrlShiftEnter;

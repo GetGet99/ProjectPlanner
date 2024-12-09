@@ -2,7 +2,7 @@
   "profiles": {
     "Get.ProjectPlanner": {
       "commandName": "MsixPackage",
-      "nativeDebugging": true
+      "nativeDebugging": false
     }
   }
 }
